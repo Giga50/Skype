@@ -1,0 +1,61 @@
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #f2f2f2;
+  color: #222;
+}
+
+.screen { display: none; height: 100%; flex-direction: column; }
+.screen.active { display: flex; }
+
+header {
+  display: flex;
+  align-items: center;
+  padding: 12px 14px;
+  background: #00aff0;
+  color: #fff;
+  font-size: 18px;
+}
+header .title { flex: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+header button { padding: 4px 8px; border: 0; background: none; color: #fff; font-size: 16px; }
+
+/* вход */
+#auth { justify-content: center; padding: 24px; background: #00aff0; }
+#auth h1 { margin: 0 0 20px; text-align: center; font-size: 44px; font-weight: 300; color: #fff; }
+#auth input { width: 100%; margin-bottom: 10px; padding: 12px; border: 0; font-size: 16px; }
+#authErr { min-height: 20px; margin-bottom: 6px; font-size: 14px; color: #fff; }
+.btn { width: 100%; padding: 12px; border: 0; background: #fff; color: #0087bd; font-size: 16px; }
+.link { width: 100%; margin-top: 14px; border: 0; background: none; color: #fff; font-size: 14px; text-decoration: underline; }
+
+/* вкладки */
+#tabs { display: flex; background: #0095cc; }
+#tabs button { flex: 1; padding: 10px; border: 0; border-bottom: 3px solid transparent; background: none; color: #cdeefb; font-size: 15px; }
+#tabs button.on { border-bottom-color: #fff; color: #fff; }
+
+.tab { display: none; flex: 1; overflow-y: auto; background: #fff; }
+.tab.on { display: block; }
+#q { width: calc(100% - 20px); margin: 10px; padding: 10px; border: 1px solid #ccc; font-size: 16px; }
+
+/* люди */
+.section { padding: 8px 14px; background: #eef7fc; color: #0087bd; font-size: 13px; }
+.person { display: flex; align-items: center; padding: 10px 14px; border-bottom: 1px solid #eee; }
+.ava { display: flex; flex: none; align-items: center; justify-content: center; width: 40px; height: 40px; margin-right: 12px; border-radius: 50%; background: #00aff0; color: #fff; font-size: 18px; }
+.info { flex: 1; min-width: 0; }
+.name { font-size: 16px; }
+.login { font-size: 13px; color: #888; }
+.act { margin-left: 6px; padding: 6px 10px; border: 1px solid #00aff0; background: #fff; color: #0087bd; font-size: 14px; }
+.act.main { background: #00aff0; color: #fff; }
+.note { font-size: 13px; color: #888; }
+.empty { padding: 20px; text-align: center; color: #888; }
+
+/* чат */
+#msgs { flex: 1; overflow-y: auto; padding: 10px; background: #e9f6fc; }
+.m { clear: both; max-width: 80%; margin-bottom: 6px; padding: 8px 12px; font-size: 15px; word-wrap: break-word; }
+.m.me { float: right; background: #00aff0; color: #fff; }
+.m.him { float: left; background: #fff; }
+#send { display: flex; padding: 8px; border-top: 1px solid #ddd; background: #fff; }
+#send input { flex: 1; min-width: 0; padding: 10px; border: 1px solid #ccc; font-size: 16px; }
+#send button { margin-left: 8px; padding: 0 16px; border: 0; background: #00aff0; color: #fff; font-size: 16px; }
