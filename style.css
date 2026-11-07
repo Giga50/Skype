@@ -59,3 +59,10 @@ header button { padding: 4px 8px; border: 0; background: none; color: #fff; font
 #send { display: flex; padding: 8px; border-top: 1px solid #ddd; background: #fff; }
 #send input { flex: 1; min-width: 0; padding: 10px; border: 1px solid #ccc; font-size: 16px; }
 #send button { margin-left: 8px; padding: 0 16px; border: 0; background: #00aff0; color: #fff; font-size: 16px; }
+
+/* профиль */
+#profileBody { padding: 16px; }
+#profileBody label { display: block; margin: 12px 0 4px; font-size: 13px; color: #666; }
+#profileBody input, #profileBody select { width: 100%; padding: 10px; border: 1px solid #ccc; background: #fff; font-size: 16px; }
+#profileErr { min-height: 20px; margin: 10px 0; font-size: 14px; color: #c0392b; }
+#profileBody .btn { background: #00aff0; color: #fff; }

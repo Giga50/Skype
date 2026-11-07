@@ -21,6 +21,7 @@
 <div id="main" class="screen">
   <header>
     <span class="title" id="meName"></span>
+    <button id="openProfile">Профиль</button>
     <button id="logout">Выйти</button>
   </header>
   <nav id="tabs">
@@ -34,6 +35,27 @@
   <div id="tab-search" class="tab">
     <input id="q" type="text" placeholder="Имя или логин">
     <div id="found"></div>
+  </div>
+</div>
+
+<div id="profile" class="screen">
+  <header>
+    <button id="profileBack">&#8592;</button>
+    <span class="title">Мой профиль</span>
+  </header>
+  <div id="profileBody">
+    <label for="pName">Имя</label>
+    <input id="pName" type="text" maxlength="30">
+    <label for="pLogin">Логин</label>
+    <input id="pLogin" type="text" maxlength="20" autocapitalize="none">
+    <label for="pStatus">Статус</label>
+    <select id="pStatus">
+      <option value="online">В сети</option>
+      <option value="away">Нет на месте</option>
+      <option value="busy">Не беспокоить</option>
+    </select>
+    <div id="profileErr"></div>
+    <button id="profileSave" class="btn">Сохранить</button>
   </div>
 </div>
 

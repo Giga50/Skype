@@ -4,6 +4,7 @@
 var db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 var me = null;        // вошедший пользователь
+var myProfile = null; // его строка из profiles
 var current = null;   // профиль того, с кем открыт чат
 var rows = [];        // строки таблицы contacts, где участвую я
 var profiles = {};    // id -> профиль, для всех, кто есть в контактах
@@ -27,6 +28,12 @@ function showScreen(id) {
   $(id).classList.add('active');
 }
 
+var STATUSES = { online: 'в сети', away: 'нет на месте', busy: 'не беспокоить' };
+
+function statusText(s) {
+  return STATUSES[s] || '';
+}
+
 function nameOf(p) {
   return p.display_name || p.username;
 }
@@ -37,7 +44,8 @@ function personRow(p) {
   row.appendChild(el('div', 'ava', nameOf(p).charAt(0).toUpperCase()));
   var info = el('div', 'info');
   info.appendChild(el('div', 'name', nameOf(p)));
-  info.appendChild(el('div', 'login', '@' + p.username));
+  var status = statusText(p.status);
+  info.appendChild(el('div', 'login', '@' + p.username + (status ? ' - ' + status : '')));
   row.appendChild(info);
   return row;
 }
@@ -124,7 +132,10 @@ $('logout').onclick = async function () {
 async function startApp(user) {
   me = user;
   var res = await db.from('profiles').select('*').eq('id', me.id);
-  if (res.data && res.data[0]) $('meName').textContent = nameOf(res.data[0]);
+  if (res.data && res.data[0]) {
+    myProfile = res.data[0];
+    $('meName').textContent = nameOf(myProfile);
+  }
 
   await loadContacts();
   listenMessages();
@@ -322,6 +333,49 @@ $('text').onkeydown = function (e) {
 };
 $('back').onclick = function () {
   current = null;
+  showScreen('main');
+};
+
+/* ===== профиль ===== */
+
+function openProfile() {
+  if (!myProfile) return;
+  $('pName').value = myProfile.display_name || '';
+  $('pLogin').value = myProfile.username;
+  $('pStatus').value = myProfile.status || 'online';
+  $('profileErr').textContent = '';
+  showScreen('profile');
+}
+
+async function saveProfile() {
+  var name = $('pName').value.trim();
+  var login = $('pLogin').value.trim().toLowerCase();
+
+  if (!name) {
+    $('profileErr').textContent = 'Введи имя';
+    return;
+  }
+  if (!/^[a-z0-9_]{3,20}$/.test(login)) {
+    $('profileErr').textContent = 'Логин: 3-20 символов, латиница, цифры и _';
+    return;
+  }
+
+  var res = await db.from('profiles')
+    .update({ display_name: name, username: login, status: $('pStatus').value })
+    .eq('id', me.id);
+  if (res.error || !res.data || !res.data[0]) {
+    $('profileErr').textContent = 'Такой логин уже занят';
+    return;
+  }
+
+  myProfile = res.data[0];
+  $('meName').textContent = nameOf(myProfile);
+  showScreen('main');
+}
+
+$('openProfile').onclick = openProfile;
+$('profileSave').onclick = saveProfile;
+$('profileBack').onclick = function () {
   showScreen('main');
 };
 
