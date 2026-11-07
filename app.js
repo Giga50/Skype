@@ -129,13 +129,22 @@ $('logout').onclick = async function () {
 
 /* ===== контакты ===== */
 
+async function loadMyProfile() {
+  var res = await db.from('profiles').select('*').eq('id', me.id);
+  if (res.data && res.data[0]) return res.data[0];
+
+  // Строки профиля нет (например, регистрация оборвалась): заводим её по почте.
+  var base = (me.email || 'user').split('@')[0].toLowerCase()
+    .replace(/[^a-z0-9_]/g, '').slice(0, 14) || 'user';
+  var login = base + Math.floor(Math.random() * 900 + 100);
+  var made = await db.from('profiles').insert({ id: me.id, username: login, display_name: base });
+  return (made.data && made.data[0]) || null;
+}
+
 async function startApp(user) {
   me = user;
-  var res = await db.from('profiles').select('*').eq('id', me.id);
-  if (res.data && res.data[0]) {
-    myProfile = res.data[0];
-    $('meName').textContent = nameOf(myProfile);
-  }
+  myProfile = await loadMyProfile();
+  if (myProfile) $('meName').textContent = nameOf(myProfile);
 
   await loadContacts();
   listenMessages();
@@ -384,3 +393,13 @@ $('profileBack').onclick = function () {
 setMode(false);
 var saved = db.auth.session();
 if (saved && saved.user) startApp(saved.user);
+
+// Вызывается оболочкой Windows 10 Mobile по аппаратной кнопке «назад».
+// Возвращает 'true', если страница сама вернулась на предыдущий экран.
+window.appBack = function () {
+  var active = document.querySelector('.screen.active');
+  if (!active) return 'false';
+  if (active.id === 'chat') { $('back').onclick(); return 'true'; }
+  if (active.id === 'profile') { $('profileBack').onclick(); return 'true'; }
+  return 'false';
+};
